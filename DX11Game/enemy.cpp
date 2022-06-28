@@ -16,6 +16,8 @@ namespace {
 
 // コンストラクタ
 CEnemy::CEnemy(CScene* pScene) : CModel(pScene) {
+	SetRadius(0.1f);
+	SetScale(XMFLOAT3(0.5f, 0.5f, 0.5f));
 	m_id = GOT_ENEMY;
 	m_pPlayer = nullptr;
 }
@@ -105,10 +107,11 @@ void CEnemy::Update() {
 }
 
 void CEnemy::Draw() {
-	XMFLOAT4X4 mW = m_mWorld;
-	XMFLOAT4X4 mRotW;
-	XMStoreFloat4x4(&mRotW, XMMatrixMultiply(XMMatrixRotationY(XMConvertToRadians(180.0f)), XMLoadFloat4x4(&mW)));
-	m_mWorld = mRotW;
+	//XMFLOAT4X4 mW = m_mWorld;	// 現在のワールド変換を保存しておく
+	//XMFLOAT4X4 mWorkW = m_mWorld;	// 仮変換用のワーク
+	////XMStoreFloat4x4(&mWorkW, XMMatrixMultiply(XMMatrixScaling(0.3f,0.3f,0.3f), XMLoadFloat4x4(&mWorkW)));
+	//XMStoreFloat4x4(&mWorkW, XMMatrixMultiply(XMMatrixRotationY(XMConvertToRadians(180.0f)), XMLoadFloat4x4(&mWorkW)));
+	//m_mWorld = mWorkW;
 	CModel::Draw();
-	m_mWorld = mW;
+	//m_mWorld = mW;
 }

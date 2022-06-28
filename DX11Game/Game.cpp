@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ゲーム クラス実装 [Game.cpp]
-// Author : HIROHIKO HAMAYA
+// Author : 伊地田真衣
 //
 //=============================================================================
 #include "Game.h"
@@ -11,6 +11,7 @@
 #include "Fade.h"
 #include "DebugProc.h"
 #include "enemy.h"
+#include "Radar.h"
 
 // コンストラクタ
 CGame::CGame() : CScene()
@@ -45,6 +46,16 @@ bool CGame::Init()
 		pLight->Init();
 	}
 
+	// 照準環テクスチャ読込                                     
+	if (FAILED(CSightRing::LoadTexture())) {                    
+		return false;                                           
+	}
+
+	// レーダーテクスチャ読込
+	if (FAILED(CRadar::LoadTexture())) {
+		return false;
+	}
+
 	m_pPlayer = new CPlayer(this);
 	for (int i = 0; i < _countof(m_pEnemy); ++i) {
 		//CEnemy* pEnemy = new CEnemy(this);
@@ -56,6 +67,9 @@ bool CGame::Init()
 		mW._41 = (float)(rand() % 100 - 50);
 		mW._43 = (float)(rand() % 100 - 50);
 		m_pEnemy[i]->SetWorld(mW);
+		m_pSightRing[i] =                                       
+			CSightRing::Create(XMFLOAT3(mW._41, mW._42, mW._43),
+				CModel::GetAssimp(MODEL_ENEMY)->GetRadius());
 	}
 	//m_camera.SetPlayer(m_pPlayer);
 	//m_pExp = new CExplosion(this);
@@ -71,6 +85,10 @@ bool CGame::Init()
 
 	m_camera.SetPlayer(m_pPlayer);
 
+	// レーダー初期化
+	m_pRader = new CRadar();
+	m_pRader->Init(this);
+
 	// BGM再生開始
 	CSound::Play(BGM_GAME);
 
@@ -85,19 +103,40 @@ void CGame::Fin()
 
 	// 全オブジェクト終了処理
 	CGameObj::FinAll(m_pObj);
+
+	// 照準環テクスチャ解放                                   
+	CSightRing::ReleaseTexture();
+
+	// レーダー解放
+	CRadar::ReleaseTexture();
 }
 
 // 更新
 void CGame::Update()
 {
 	// 境界表示切替
-	if (CInput::GetKeyTrigger(VK_B)) {
+	//if (CInput::GetKeyTrigger(VK_B)) {
 		m_nBoundary = (m_nBoundary + 1) % 2;
 		UpdateBoundary();
-	}
+	//}
 
 	// 全キャラ更新
 	CGameObj::UpdateAll(m_pObj);
+
+	// 照準環更新                                             
+	for (int i = 0; i < _countof(m_pSightRing); ++i) {        
+		if (m_pEnemy[i]->IsVisible()) {                       
+			m_pSightRing[i]->SetVisible();                    
+			m_pSightRing[i]->Move(m_pEnemy[i]->GetPos());     
+		}
+		else {                                                
+			m_pSightRing[i]->SetVisible(false);               
+		}                                                     
+		m_pSightRing[i]->Update();                            
+	}
+
+	// レーダー更新
+	m_pRader->Update();
 
 	//// 爆発中
 	//if (m_uTimer) {
@@ -124,7 +163,9 @@ void CGame::Update()
 
 	static LPCSTR boundary[] = {"ﾋﾋｮｳｼﾞ","ｷｭｳ"};
 	CDebugProc::Print("\nx84\xCE[B]:ｷｮｳｶｲ\x84\xCF\n",boundary[m_nBoundary]);
+	CDebugProc::Print("ｻｲｽﾞ", m_pEnemy[0]->GetRadius());
 	CDebugProc::Print("\n");
+
 }
 
 void CGame::UpdateBoundary() {
@@ -158,4 +199,12 @@ void CGame::Draw()
 {
 	// 全キャラ描画
 	CGameObj::DrawAll(m_pObj);
+
+	// 照準環描画                                               
+	for (int i = 0; i < _countof(m_pSightRing); ++i) {          
+		m_pSightRing[i]->Draw();                                
+	}
+
+	// レーダー描画
+	m_pRader->Draw();
 }

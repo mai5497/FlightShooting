@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // シーン クラス実装 [Scene.cpp]
-// Author : HIROHIKO HAMAYA
+// Author : 伊地田真衣
 //
 //=============================================================================
 #include "Scene.h"
@@ -59,7 +59,8 @@ bool CScene::InitAll()
 	new CTitle;
 	new CGame;
 
-	Change(SCENE_GAME);	//Change(SCENE_TITLE);
+	//Change(SCENE_GAME);
+	Change(SCENE_TITLE);
 	return true;
 }
 

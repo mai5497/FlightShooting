@@ -15,7 +15,7 @@ namespace {
 	// 3Dモデル ファイル名
 	LPCSTR g_pszModelPath[MAX_MODEL] = {
 		"data/model/airplane.x",
-		"data/model/airplane.x",
+		"data/model/Tomato.fbx",
 		"data/model/sky.fbx",
 		"data/model/airplane.x",
 		"data/model/airplane.x",
@@ -128,17 +128,11 @@ void CModel::SetModel(EModel model)
 		SetRadius(0.5f);
 		SetBBox(XMFLOAT3(0.5f, 0.5f, 0.5f));
 		SetCenter(XMFLOAT3(0, 0, 0));
-		//m_fRadius = 0.5f;
-		//m_vBBox = XMFLOAT3(0.5f, 0.5f, 0.5f);
-		//m_vCenter = XMFLOAT3(0, 0, 0);
 	} else {
 		m_pModel = m_pModels[model];
 		SetRadius(m_pModel->GetRadius());
 		SetBBox(m_pModel->GetBBox());
 		SetCenter(m_pModel->GetCenter());
-		//m_fRadius = m_pModel->GetRadius();
-		//m_vBBox = m_pModel->GetBBox();
-		//m_vCenter = m_pModel->GetCenter();
 	}
 }
 

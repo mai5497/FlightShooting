@@ -28,11 +28,11 @@ namespace {
 	const float FP_POS_R_Z = 20.0f;	// 一人称カメラの注視点位置（Z座標）
 
 	const float TP_POS_P_X = 0.0f;	// 三人称カメラの視点位置（X座標）
-	const float TP_POS_P_Y = 5.0f;	// 三人称カメラの視点位置（Y座標）
-	const float TP_POS_P_Z = -10.0f;	// 三人称カメラの視点位置（Z座標）
+	const float TP_POS_P_Y = 1.5f;	// 三人称カメラの視点位置（Y座標）
+	const float TP_POS_P_Z = -20.0f;	// 三人称カメラの視点位置（Z座標）
 	const float TP_POS_R_X = 0.0f;	// 三人称カメラの注視点位置（X座標）
-	const float TP_POS_R_Y = 0.0f;	// 三人称カメラの注視点位置（Y座標）
-	const float TP_POS_R_Z = 5.0f;	// 三人称カメラの注視点位置（Z座標）
+	const float TP_POS_R_Y = 4.0f;	// 三人称カメラの注視点位置（Y座標）
+	const float TP_POS_R_Z = 10.0f;	// 三人称カメラの注視点位置（Z座標）
 };
 
 
@@ -63,11 +63,11 @@ void CGameCamera::Init() {
 // 更新
 void CGameCamera::Update()
 {
-	//// 注視点更新
-	//if (m_pPlayer) {
-	//	m_vTarget = m_pPlayer->GetPos();
-	//}
-	//CCamera::Update();
+	// 注視点更新
+	if (m_pPlayer) {
+		m_vTarget = m_pPlayer->GetPos();
+	}
+	CCamera::Update();
 
 	// 視点切り替え
 	//if (CInput::GetKeyRelease(VK_0) || CInput::GetKeyRelease(VK_NUMPAD0)) {

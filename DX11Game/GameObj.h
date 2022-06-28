@@ -41,6 +41,7 @@ protected:
 	XMFLOAT3 m_vScale;		// 拡縮
 
 	XMFLOAT4X4 m_mWorld;	// ワールド変換
+	XMMATRIX m_mInvWorld;	// ワールド座標の逆行列
 
 	bool m_bVisible;		// 表示フラグ
 
@@ -75,6 +76,7 @@ public:
 	XMFLOAT3& GetScale() { return m_vScale; }
 	void SetWorld(XMFLOAT4X4& mWorld) { m_mWorld = mWorld; }
 	XMFLOAT4X4& GetWorld() { return m_mWorld; }
+	XMMATRIX GetInvWorld() { m_mInvWorld = XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_mWorld));	return m_mInvWorld; }
 	XMFLOAT3& GetVel() {return m_vVel;}
 
 

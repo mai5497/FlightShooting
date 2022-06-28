@@ -9,8 +9,15 @@
 #include "Player.h"
 #include "GameCamera.h"
 #include "Explosion.h"
+#include "SightRing.h"
+//#include "Radar.h"
 
+// 定数定義
+#define MAX_ENEMY (20)
+
+// 前方定義
 class CEnemy;
+class CRadar;
 
 // クラス定義
 class CGame : public CScene
@@ -22,7 +29,9 @@ private:
 
 	CGameCamera m_camera;
 	CPlayer* m_pPlayer;
-	CEnemy *m_pEnemy[20];
+	CEnemy *m_pEnemy[MAX_ENEMY];
+	CSightRing* m_pSightRing[MAX_ENEMY];
+	CRadar* m_pRader;
 	int m_nBoundary;
 	//CExplosion *m_pExp;
 	//UINT m_uTimer;
@@ -38,5 +47,5 @@ public:
 	int GetBoundary() {
 		return m_nBoundary;
 	}
-
+	CPlayer* GetPlayer() { return m_pPlayer; }
 };
